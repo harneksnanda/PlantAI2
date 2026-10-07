@@ -19,4 +19,11 @@ public class TabletPageManager : MonoBehaviour
         page2_TomatoInfo.SetActive(false);
         page3_Environment.SetActive(true);
     }
+
+    public void BackToPlantSelection()
+    {
+        page1_SelectPlant.SetActive(true);
+        page2_TomatoInfo.SetActive(false);
+        page3_Environment.SetActive(false);
+    }
 }

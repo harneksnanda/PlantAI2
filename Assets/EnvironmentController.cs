@@ -12,8 +12,9 @@ public class EnvironmentController : MonoBehaviour
     [Header("ICU Light")]
     public Light environmentLight;
 
-    [Header("Fog")]
-    public Color fogColor = Color.gray;
+    
+    [Header("Humidity Fog")]
+    public ParticleSystem humidityFog;
 
     [Header("Value Text")]
     public TMP_Text lightValue;
@@ -58,12 +59,25 @@ public class EnvironmentController : MonoBehaviour
             );
         }
 
-        // HUMIDITY → FOG
-        RenderSettings.fogDensity = Mathf.Lerp(
-            0f,
-            0.08f,
-            humiditySlider.value / 100f
-        );
+        // HUMIDITY → PARTICLE FOG
+        if (humiditySlider != null && humidityFog != null)
+        {
+            var emission = humidityFog.emission;
+
+            float humidityPercent = humiditySlider.value / 1f;
+
+            emission.rateOverTime = Mathf.Lerp(
+                0f,
+                800f,
+                humidityPercent
+            );
+            Debug.Log("Emiddion Value: " + emission.rateOverTime);
+
+            if (!humidityFog.isPlaying)
+            {
+                humidityFog.Play();
+            }
+        }
 
         // DISPLAY VALUES
         if (lightValue != null)

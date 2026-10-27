@@ -63,4 +63,22 @@ public class TabletPageManager : MonoBehaviour
         page4_PlantCondition.SetActive(
             page4_PlantCondition == pageToShow);
     }
+
+
+    public void SkipTwoDaysAndContinue()
+    {
+        if (plantStageManager == null)
+        {
+            Debug.LogError("PlantStageManager is not assigned!");
+            return;
+        }
+
+        bool advanced = plantStageManager.TryAdvanceAfterTwoDays();
+
+        if (advanced)
+        {
+            ShowOnly(page3_Environment);
+        }
+    }
+
 }

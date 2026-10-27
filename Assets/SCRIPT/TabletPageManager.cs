@@ -81,4 +81,37 @@ public class TabletPageManager : MonoBehaviour
         }
     }
 
+
+    public void RegulateAgain()
+    {
+        // Return to the environment page so the user
+        // can adjust the sliders and improve the plant.
+        ShowOnly(page3_Environment);
+    }
+
+    public void MoveToNextStage()
+    {
+        if (plantStageManager == null)
+        {
+            Debug.LogError("PlantStageManager is not assigned!");
+            return;
+        }
+
+        // This only advances if the current condition is Healthy.
+        bool advanced = plantStageManager.TryAdvanceAfterTwoDays();
+
+        if (advanced)
+        {
+            // Return to environment settings for the new stage.
+            ShowOnly(page3_Environment);
+        }
+        else
+        {
+            // The plant is unhealthy, or it has reached the final stage.
+            // Keep the condition page visible so the user can respond.
+            ShowOnly(page4_PlantCondition);
+        }
+    }
+
+
 }

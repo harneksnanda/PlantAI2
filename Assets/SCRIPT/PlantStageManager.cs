@@ -27,6 +27,10 @@ public class PlantStageManager : MonoBehaviour
     [Header("UI")]
     public TMP_Text conditionText;
 
+    [Header("Page 4 Buttons")]
+    public GameObject regulateAgainButton;
+    public GameObject nextStageButton;
+
     [Header("Progress")]
     [Range(1, 3)]
     public int currentStage = 1;
@@ -89,14 +93,17 @@ public class PlantStageManager : MonoBehaviour
         SetActiveSafe(healthySapling, false);
         SetActiveSafe(stressedSapling, false);
         SetActiveSafe(criticalSapling, false);
+        UpdateActionButtons();
 
         SetActiveSafe(healthyFlowering, false);
         SetActiveSafe(stressedFlowering, false);
         SetActiveSafe(criticalFlowering, false);
+        UpdateActionButtons();
 
         SetActiveSafe(healthyFruiting, false);
         SetActiveSafe(stressedFruiting, false);
         SetActiveSafe(criticalFruiting, false);
+        UpdateActionButtons();
 
         GameObject selectedPlant = null;
 
@@ -198,4 +205,26 @@ public class PlantStageManager : MonoBehaviour
         if (obj != null)
             obj.SetActive(active);
     }
+
+
+    void UpdateActionButtons()
+    {
+        bool isHealthy =
+            currentCondition == PlantCondition.Healthy;
+
+        // Show Regulate Again only if the plant needs care.
+        if (regulateAgainButton != null)
+        {
+            regulateAgainButton.SetActive(!isHealthy);
+        }
+
+        // Show Next Stage only when healthy and not at the final stage.
+        if (nextStageButton != null)
+        {
+            nextStageButton.SetActive(
+                isHealthy && currentStage < 3
+            );
+        }
+    }
+
 }

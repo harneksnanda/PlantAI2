@@ -21,6 +21,11 @@ public class EnvironmentController : MonoBehaviour
     public TMP_Text humidityValue;
     public TMP_Text temperatureValue;
 
+    [Header("Slider Value Text")]
+    public TMP_Text lightValueText;
+    public TMP_Text humidityValueText;
+    public TMP_Text temperatureValueText;
+
     void Start()
     {
         RenderSettings.fog = true;
@@ -89,5 +94,16 @@ public class EnvironmentController : MonoBehaviour
         if (temperatureValue != null)
             temperatureValue.text =
                 Mathf.RoundToInt(temperatureSlider.value) + "°C";
+
+
+        if (lightValueText != null)
+            lightValueText.text = Mathf.RoundToInt(lightSlider.value) + "%";
+
+        if (humidityValueText != null)
+            humidityValueText.text = Mathf.RoundToInt(humiditySlider.value) + "%";
+
+        if (temperatureValueText != null)
+            temperatureValueText.text = Mathf.RoundToInt(temperatureSlider.value) + "°C";
     }
+
 }

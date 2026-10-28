@@ -31,6 +31,10 @@ public class PlantStageManager : MonoBehaviour
     public GameObject regulateAgainButton;
     public GameObject nextStageButton;
 
+    private bool regulateShownStage1 = false;
+    private bool regulateShownStage2 = false;
+    private bool regulateShownStage3 = false;
+
     [Header("Progress")]
     [Range(1, 3)]
     public int currentStage = 1;
@@ -207,18 +211,33 @@ public class PlantStageManager : MonoBehaviour
     }
 
 
+
+
     void UpdateActionButtons()
     {
         bool isHealthy =
             currentCondition == PlantCondition.Healthy;
 
-        // Show Regulate Again only if the plant needs care.
+        // Regulate Again appears when the plant is unhealthy
+        // and the button has not been used in this stage.
+        bool regulateAlreadyShown = false;
+
+        if (currentStage == 1)
+            regulateAlreadyShown = regulateShownStage1;
+        else if (currentStage == 2)
+            regulateAlreadyShown = regulateShownStage2;
+        else if (currentStage == 3)
+            regulateAlreadyShown = regulateShownStage3;
+
         if (regulateAgainButton != null)
         {
-            regulateAgainButton.SetActive(!isHealthy);
+            regulateAgainButton.SetActive(
+                !isHealthy && !regulateAlreadyShown
+            );
         }
 
-        // Show Next Stage only when healthy and not at the final stage.
+        // Next Stage appears only when the plant is healthy
+        // and the plant has not reached Stage 3.
         if (nextStageButton != null)
         {
             nextStageButton.SetActive(
@@ -226,5 +245,21 @@ public class PlantStageManager : MonoBehaviour
             );
         }
     }
+
+
+
+    public void MarkRegulateButtonShown()
+    {
+        if (currentStage == 1)
+            regulateShownStage1 = true;
+        else if (currentStage == 2)
+            regulateShownStage2 = true;
+        else if (currentStage == 3)
+            regulateShownStage3 = true;
+
+        UpdateActionButtons();
+    }
+
+
 
 }

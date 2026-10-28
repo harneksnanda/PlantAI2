@@ -82,12 +82,17 @@ public class TabletPageManager : MonoBehaviour
     }
 
 
+
     public void RegulateAgain()
     {
-        // Return to the environment page so the user
-        // can adjust the sliders and improve the plant.
+        if (plantStageManager != null)
+        {
+            plantStageManager.MarkRegulateButtonShown();
+        }
+
         ShowOnly(page3_Environment);
     }
+
 
     public void MoveToNextStage()
     {

@@ -1,13 +1,19 @@
 
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlantStageManager : MonoBehaviour
 {
     [Header("Environment Sliders")]
-    public UnityEngine.UI.Slider lightSlider;
-    public UnityEngine.UI.Slider humiditySlider;
-    public UnityEngine.UI.Slider temperatureSlider;
+    public Slider lightSlider;
+    public Slider humiditySlider;
+    public Slider temperatureSlider;
+
+    [Header("Growth Stage Parent Objects")]
+    public GameObject stage1SaplingParent;
+    public GameObject stage2FloweringParent;
+    public GameObject stage3FruitingParent;
 
     [Header("Stage 1 - Sapling")]
     public GameObject healthySapling;
@@ -24,18 +30,12 @@ public class PlantStageManager : MonoBehaviour
     public GameObject stressedFruiting;
     public GameObject criticalFruiting;
 
-    [Header("UI")]
+    [Header("Page 4 UI")]
     public TMP_Text conditionText;
-
-    [Header("Page 4 Buttons")]
     public GameObject regulateAgainButton;
     public GameObject nextStageButton;
 
-    private bool regulateShownStage1 = false;
-    private bool regulateShownStage2 = false;
-    private bool regulateShownStage3 = false;
-
-    [Header("Progress")]
+    [Header("Growth Progress")]
     [Range(1, 3)]
     public int currentStage = 1;
 
@@ -49,6 +49,13 @@ public class PlantStageManager : MonoBehaviour
     public PlantCondition currentCondition =
         PlantCondition.Healthy;
 
+
+    // ==========================================
+    // 1. EVALUATE ENVIRONMENT
+    // ==========================================
+
+    
+
     public void EvaluateStage()
     {
         if (lightSlider == null ||
@@ -56,24 +63,25 @@ public class PlantStageManager : MonoBehaviour
             temperatureSlider == null)
         {
             Debug.LogError(
-                "Assign all three environment sliders!");
+                "PlantStageManager: Assign all three sliders!"
+            );
             return;
         }
 
         int unsuitable = 0;
 
-        // Light target changes by stage.
+        // Light requirement
         float minimumLight = currentStage == 1 ? 50f : 60f;
 
         if (lightSlider.value < minimumLight)
             unsuitable++;
 
-        // Humidity target.
+        // Humidity requirement
         if (humiditySlider.value < 40f ||
             humiditySlider.value > 70f)
             unsuitable++;
 
-        // Temperature target.
+        // Temperature requirement
         float maximumTemperature =
             currentStage == 3 ? 30f : 28f;
 
@@ -81,163 +89,181 @@ public class PlantStageManager : MonoBehaviour
             temperatureSlider.value > maximumTemperature)
             unsuitable++;
 
+        // Determine plant condition
         if (unsuitable == 0)
+        {
             currentCondition = PlantCondition.Healthy;
+        }
         else if (unsuitable == 1)
+        {
             currentCondition = PlantCondition.Stressed;
+        }
         else
+        {
             currentCondition = PlantCondition.Critical;
+        }
 
         ShowPlantCondition();
+
+        Debug.Log(
+            "Stage: " + currentStage +
+            " | Condition: " + currentCondition
+        );
     }
+
+
+    // ==========================================
+    // 2. SHOW CORRECT GROWTH STAGE
+    // ==========================================
 
     public void ShowPlantCondition()
     {
-        // Hide every variant first.
-        SetActiveSafe(healthySapling, false);
-        SetActiveSafe(stressedSapling, false);
-        SetActiveSafe(criticalSapling, false);
-        UpdateActionButtons();
+        // Activate the correct growth-stage parent first.
+        SetStageObjectsActive();
 
-        SetActiveSafe(healthyFlowering, false);
-        SetActiveSafe(stressedFlowering, false);
-        SetActiveSafe(criticalFlowering, false);
-        UpdateActionButtons();
+        // Hide all nine plant models.
+        SetPlantActive(healthySapling, false);
+        SetPlantActive(stressedSapling, false);
+        SetPlantActive(criticalSapling, false);
 
-        SetActiveSafe(healthyFruiting, false);
-        SetActiveSafe(stressedFruiting, false);
-        SetActiveSafe(criticalFruiting, false);
-        UpdateActionButtons();
+        SetPlantActive(healthyFlowering, false);
+        SetPlantActive(stressedFlowering, false);
+        SetPlantActive(criticalFlowering, false);
+
+        SetPlantActive(healthyFruiting, false);
+        SetPlantActive(stressedFruiting, false);
+        SetPlantActive(criticalFruiting, false);
 
         GameObject selectedPlant = null;
 
-        if (currentStage == 1)
+        // Select model according to stage and condition.
+        switch (currentStage)
         {
-            if (currentCondition == PlantCondition.Healthy)
-                selectedPlant = healthySapling;
-            else if (currentCondition == PlantCondition.Stressed)
-                selectedPlant = stressedSapling;
-            else
-                selectedPlant = criticalSapling;
-        }
-        else if (currentStage == 2)
-        {
-            if (currentCondition == PlantCondition.Healthy)
-                selectedPlant = healthyFlowering;
-            else if (currentCondition == PlantCondition.Stressed)
-                selectedPlant = stressedFlowering;
-            else
-                selectedPlant = criticalFlowering;
-        }
-        else if (currentStage == 3)
-        {
-            if (currentCondition == PlantCondition.Healthy)
-                selectedPlant = healthyFruiting;
-            else if (currentCondition == PlantCondition.Stressed)
-                selectedPlant = stressedFruiting;
-            else
-                selectedPlant = criticalFruiting;
+            case 1:
+
+                if (currentCondition == PlantCondition.Healthy)
+                    selectedPlant = healthySapling;
+
+                else if (currentCondition == PlantCondition.Stressed)
+                    selectedPlant = stressedSapling;
+
+                else
+                    selectedPlant = criticalSapling;
+
+                break;
+
+
+            case 2:
+
+                if (currentCondition == PlantCondition.Healthy)
+                    selectedPlant = healthyFlowering;
+
+                else if (currentCondition == PlantCondition.Stressed)
+                    selectedPlant = stressedFlowering;
+
+                else
+                    selectedPlant = criticalFlowering;
+
+                break;
+
+
+            case 3:
+
+                if (currentCondition == PlantCondition.Healthy)
+                    selectedPlant = healthyFruiting;
+
+                else if (currentCondition == PlantCondition.Stressed)
+                    selectedPlant = stressedFruiting;
+
+                else
+                    selectedPlant = criticalFruiting;
+
+                break;
         }
 
-        SetActiveSafe(selectedPlant, true);
+        // Activate the selected model.
+        if (selectedPlant != null)
+        {
+            selectedPlant.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError(
+                "Plant model is missing! Check Stage " +
+                currentStage + " model references in Inspector."
+            );
+        }
+
         UpdateConditionText();
+        UpdateButtons();
     }
 
-    public bool TryAdvanceAfterTwoDays()
+
+    // ==========================================
+    // 3. ACTIVATE CORRECT PARENT OBJECT
+    // ==========================================
+
+    void SetStageObjectsActive()
     {
-        if (currentCondition != PlantCondition.Healthy)
-        {
-            if (conditionText != null)
-            {
-                conditionText.text =
-                    "Your plant needs care before it can progress. " +
-                    "Adjust the environment and submit again.";
-            }
+        if (stage1SaplingParent != null)
+            stage1SaplingParent.SetActive(currentStage == 1);
 
-            return false;
-        }
+        if (stage2FloweringParent != null)
+            stage2FloweringParent.SetActive(currentStage == 2);
 
-        if (currentStage >= 3)
-        {
-            if (conditionText != null)
-            {
-                conditionText.text =
-                    "Your tomato plant has reached the fruiting stage!";
-            }
-
-            return false;
-        }
-
-        currentStage++;
-
-        // Show the healthy version of the new growth stage.
-        currentCondition = PlantCondition.Healthy;
-        ShowPlantCondition();
-
-        if (conditionText != null)
-        {
-            conditionText.text = currentStage == 2
-                ? "Two days passed! Your tomato plant is now flowering."
-                : "Two days passed! Your tomato plant has reached the fruiting stage.";
-        }
-
-        return true;
+        if (stage3FruitingParent != null)
+            stage3FruitingParent.SetActive(currentStage == 3);
     }
+
+
+    // ==========================================
+    // 4. UPDATE CONDITION TEXT
+    // ==========================================
 
     void UpdateConditionText()
     {
         if (conditionText == null)
             return;
 
-        string stageName = currentStage == 1
-            ? "Sapling"
-            : currentStage == 2
-                ? "Flowering"
-                : "Fruiting";
+        string stageName =
+            currentStage == 1 ? "Sapling" :
+            currentStage == 2 ? "Flowering" :
+            "Fruiting";
 
-        string result = currentCondition == PlantCondition.Healthy
-            ? "Healthy - growing well!"
+        string result =
+            currentCondition == PlantCondition.Healthy
+                ? "Healthy - growing well!"
             : currentCondition == PlantCondition.Stressed
                 ? "Stressed - adjust the environment."
-                : "Critical - emergency care needed!";
+            : "Critical - emergency care needed!";
 
         conditionText.text = stageName + "\n" + result;
+
+        if (currentStage == 3 &&
+            currentCondition == PlantCondition.Healthy)
+        {
+            conditionText.text =
+                "Fruiting\nHealthy - your tomato plant has completed all stages!";
+        }
     }
 
-    void SetActiveSafe(GameObject obj, bool active)
-    {
-        if (obj != null)
-            obj.SetActive(active);
-    }
 
+    // ==========================================
+    // 5. SHOW CORRECT BUTTONS
+    // ==========================================
 
-
-
-    void UpdateActionButtons()
+    void UpdateButtons()
     {
         bool isHealthy =
             currentCondition == PlantCondition.Healthy;
 
-        // Regulate Again appears when the plant is unhealthy
-        // and the button has not been used in this stage.
-        bool regulateAlreadyShown = false;
-
-        if (currentStage == 1)
-            regulateAlreadyShown = regulateShownStage1;
-        else if (currentStage == 2)
-            regulateAlreadyShown = regulateShownStage2;
-        else if (currentStage == 3)
-            regulateAlreadyShown = regulateShownStage3;
-
+        // Unhealthy = Regulate Again
         if (regulateAgainButton != null)
         {
-            regulateAgainButton.SetActive(
-                !isHealthy && !regulateAlreadyShown
-            );
+            regulateAgainButton.SetActive(!isHealthy);
         }
 
-        // Next Stage appears only when the plant is healthy
-        // and the plant has not reached Stage 3.
+        // Healthy and Stage 1 or 2 = Next Stage
         if (nextStageButton != null)
         {
             nextStageButton.SetActive(
@@ -247,19 +273,47 @@ public class PlantStageManager : MonoBehaviour
     }
 
 
+    // ==========================================
+    // 6. ADVANCE TO NEXT GROWTH STAGE
+    // ==========================================
 
-    public void MarkRegulateButtonShown()
+    public bool TryAdvanceToNextStage()
     {
-        if (currentStage == 1)
-            regulateShownStage1 = true;
-        else if (currentStage == 2)
-            regulateShownStage2 = true;
-        else if (currentStage == 3)
-            regulateShownStage3 = true;
+        if (currentCondition != PlantCondition.Healthy)
+        {
+            Debug.LogWarning(
+                "Plant is not healthy. Cannot advance!"
+            );
+            return false;
+        }
 
-        UpdateActionButtons();
+        if (currentStage >= 3)
+        {
+            Debug.Log("Plant has completed all growth stages!");
+            return false;
+        }
+
+        // Advance growth stage.
+        currentStage++;
+
+        // Start the new stage as healthy until evaluated.
+        currentCondition = PlantCondition.Healthy;
+
+        // Display the healthy model for the new stage.
+        ShowPlantCondition();
+
+        Debug.Log(
+            "Plant advanced to Stage " + currentStage
+        );
+
+        return true;
     }
 
-
-
+    void SetPlantActive(GameObject plant, bool active)
+    {
+        if (plant != null)
+        {
+            plant.SetActive(active);
+        }
+    }
 }

@@ -6751,6 +6751,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LEVEL1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9dddb0cd22333fa47ac7a6d44616dcee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12202,7 +12206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &684175780
 Transform:
   m_ObjectHideFlags: 0
@@ -17057,7 +17061,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &960293411
 Transform:
   m_ObjectHideFlags: 0
@@ -21522,7 +21526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1220845313
 Transform:
   m_ObjectHideFlags: 0
@@ -39880,7 +39884,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2025525572
 Transform:
   m_ObjectHideFlags: 0
@@ -42215,9 +42219,9 @@ MonoBehaviour:
   lightSlider: {fileID: 2062586}
   humiditySlider: {fileID: 1800441973}
   temperatureSlider: {fileID: 1604534265}
-  stage1SaplingParent: {fileID: 0}
-  stage2FloweringParent: {fileID: 0}
-  stage3FruitingParent: {fileID: 0}
+  stage1SaplingParent: {fileID: 1411705149}
+  stage2FloweringParent: {fileID: 1220845312}
+  stage3FruitingParent: {fileID: 2025525571}
   healthySapling: {fileID: 228602612}
   stressedSapling: {fileID: 960293410}
   criticalSapling: {fileID: 684175779}

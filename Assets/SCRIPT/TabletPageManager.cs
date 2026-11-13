@@ -36,6 +36,9 @@ public class TabletPageManager : MonoBehaviour
     public void ShowEnvironment()
     {
         ShowOnly(page3_Environment);
+
+        if (plantStageManager != null)
+            plantStageManager.UpdateEnvironmentStageText();
     }
 
     public void BackToPlantSelection()
@@ -58,7 +61,7 @@ public class TabletPageManager : MonoBehaviour
 
     public void RegulateAgain()
     {
-        ShowOnly(page3_Environment);
+        ShowEnvironment();
     }
 
     public void MoveToNextStage()

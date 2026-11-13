@@ -35,6 +35,9 @@ public class PlantStageManager : MonoBehaviour
     public GameObject regulateAgainButton;
     public GameObject nextStageButton;
 
+    [Header("Environment Page Stage Text")]
+    public TMP_Text environmentStageText;
+
     [Header("Growth Progress")]
     [Range(1, 3)]
     public int currentStage = 1;
@@ -109,6 +112,27 @@ public class PlantStageManager : MonoBehaviour
             "Stage: " + currentStage +
             " | Condition: " + currentCondition
         );
+    }
+
+    public void UpdateEnvironmentStageText()
+    {
+        if (environmentStageText == null)
+            return;
+
+        switch (currentStage)
+        {
+            case 1:
+                environmentStageText.text = "STAGE 1 - SAPLING";
+                break;
+
+            case 2:
+                environmentStageText.text = "STAGE 2 - FLOWERING";
+                break;
+
+            case 3:
+                environmentStageText.text = "STAGE 3 - FRUITING";
+                break;
+        }
     }
 
 

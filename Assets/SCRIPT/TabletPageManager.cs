@@ -64,6 +64,7 @@ public class TabletPageManager : MonoBehaviour
         ShowEnvironment();
     }
 
+
     public void MoveToNextStage()
     {
         if (plantStageManager == null)
@@ -72,12 +73,13 @@ public class TabletPageManager : MonoBehaviour
             return;
         }
 
-        bool advanced =
-            plantStageManager.TryAdvanceToNextStage();
+        bool advanced = plantStageManager.TryAdvanceToNextStage();
 
         if (advanced)
         {
-            ShowOnly(page3_Environment);
+            plantStageManager.UpdateEnvironmentStageText();
+            ShowEnvironment();
         }
     }
+
 }

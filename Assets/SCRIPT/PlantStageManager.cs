@@ -114,26 +114,25 @@ public class PlantStageManager : MonoBehaviour
         );
     }
 
+
     public void UpdateEnvironmentStageText()
     {
         if (environmentStageText == null)
-            return;
-
-        switch (currentStage)
         {
-            case 1:
-                environmentStageText.text = "STAGE 1 - SAPLING";
-                break;
-
-            case 2:
-                environmentStageText.text = "STAGE 2 - FLOWERING";
-                break;
-
-            case 3:
-                environmentStageText.text = "STAGE 3 - FRUITING";
-                break;
+            Debug.LogError("Environment Stage Text is not assigned!");
+            return;
         }
+
+        if (currentStage == 1)
+            environmentStageText.text = "STAGE 1 - SAPLING";
+        else if (currentStage == 2)
+            environmentStageText.text = "STAGE 2 - FLOWERING";
+        else if (currentStage == 3)
+            environmentStageText.text = "STAGE 3 - FRUITING";
+
+        Debug.Log("Current Stage: " + currentStage);
     }
+
 
 
     // ==========================================
